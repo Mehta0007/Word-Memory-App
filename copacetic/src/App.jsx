@@ -11,8 +11,27 @@ function App() {
   const [name, setName] = useState('')
   // const selectedPage = 2 //zero is for welcome , 1 is for dashboard, 2 is for challenge
 
+    function handleChangePage(pageIndex) {
+    setSelectedPage(pageIndex)
+  }
+
+function handleCreateAccount() {
+  if (!name) {
+    alert("Please enter your name first!");
+    return;
+  }
+  localStorage.setItem('username', name);
+  handleChangePage(1); // move to Dashboard
+}
+
+
+
   const pages = {
-    0: <Welcome username="hello" name={name} setName={setName} />,
+    0: <Welcome 
+    handleCreateAccount={handleCreateAccount}
+    username="hello" 
+    name={name} 
+    setName={setName} />,
     1: <Dashboard/>,
     2: <Challenge/>
   }
