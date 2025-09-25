@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 
 import WORDS from "./utils/VOCAB.json";
 
-import { getWordByIndex, PLAN } from "./utils";
+import { countdownIn24Hours, getWordByIndex, PLAN } from "./utils";
 
 function App() {
   const [selectedPage, setSelectedPage] = useState(0);
@@ -15,7 +15,7 @@ function App() {
   // const selectedPage = 2 //zero is for welcome , 1 is for dashboard, 2 is for challenge
   const [day, setDay] = useState(1);
   const [dateTime, setDateTime] = useState(null);
-  const [history, setHistory] = useState([]);
+  const [history, setHistory] = useState({});
   const [attempts, setAttempts] = useState(0);
 
   const daysWords = PLAN[day].map((idx) => {
@@ -66,6 +66,45 @@ setAttempts(newRecord)
 
       //we have a name , so we can skip  the dashboard
       setSelectedPage(1);
+    }
+
+    if (localStorage.getItem('attempts')) {
+      //then we found attempts
+      let data = parseInt(localStorage.getItem('attempts'))
+      setAttempts(data)
+    }
+
+    if (localStorage.getItem('history')) {
+      setHistory(JSON.parse(
+        localStorage.getItem('history')
+      ))
+    }
+
+    if (localStorage.getItem('day')) {
+      const {day: d, datetime: dt } =  JSON.parse(localStorage.getItem('day'))
+      setDateTime(dt)
+      setDay(d)
+
+      if (d > 1 && dt) {
+        const diff = countdownIn24Hours(dt) 
+        if (diff < 0) {
+          console.log('Failed challenge')
+          let newHistory = {...history}
+          const timestamp = new Date(dt)
+          const formattedTimestamp = timestamp.toString().split(' ').slice(1, 4).join(' ')
+          newHistory[formattedTimestamp] = d
+          setHistory(newHistory)
+          setDay(1)
+          setDateTime(null)
+          setAttempts(0)
+
+          localStorage.setItem('attempts', 0)
+          localStorage.setItem('history', JSON.stringify(newHistory))
+          localStorage.setItem( 'day',  JSON.stringify({
+            day: 1, datetime: null
+          }))
+        }
+      }
     }
   }, []);
 

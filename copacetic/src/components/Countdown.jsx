@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { convertMilliseconds, countdownIn24Hours } from "../utils"
 
 
@@ -13,11 +13,17 @@ export default function Countdown(props) {
 const [remainingMs, setRemainingMs] = useState(countdownIn24Hours(targetMillis))
 
 const timer = convertMilliseconds(remainingMs)
-console.log(timer)
+
+useEffect(() => {
+    const interval = setInterval(() => {
+        setRemainingMs()
+    }, 1000)
+    return () => clearInterval(interval)
+}, [targetMillis])
 
     return(
         <div className="card countdown-card">
-            <h1 className="item-header">Day {1} </h1> 
+            <h1 className="item-header">Day {day} </h1> 
             <div className="today-container">
                 <div>
                     <p>Time Remaining</p>

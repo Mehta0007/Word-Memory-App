@@ -15,12 +15,12 @@ export default function Challenge(props) {
         const [wordIndex, setWordIndex] = useState(0)
         const [inputVal, setInputVal] = useState('')
         const [showDefinition, setShowDefinition] = useState(false)
-        const [listToLearn ,setListToLearn ] = useState({
+        const [listToLearn ,setListToLearn ] = useState([
             ...daysWords, 
             ...shuffle(daysWords),
             ...shuffle(daysWords),
             ...shuffle(daysWords),
-        })
+        ])
 
         
         
@@ -28,6 +28,13 @@ export default function Challenge(props) {
     const isNewWord = showDefinition || (!isEncountered(day, word)) && wordIndex < daysWords.length
     // const word = 'copacetic' 
     const definition = DEFINITIONS[word]
+
+
+    function giveUp(){
+        setListToLearn([...listToLearn, word])
+        setShowDefinition(true)
+    }
+
 
     return(
        <section id="challenge" >
@@ -79,12 +86,20 @@ return
                 type="text" placeholder="Enter the definition..." />
             </div>
             <div className="challenge-btns">
-                <button className="card-button-secondary">
+                <button 
+                onClick={()=> {
+                    handleChangePage(1)
+                }}
+                className="card-button-secondary">
                     <h6>Quit</h6>
                 </button>
-                <button className="card-button-primary" >I forgot</button>
+                <button 
+                onClick={giveUp}
+                className="card-button-primary" >I forgot</button>
             </div>
-            <ProgressBar/>
+            <ProgressBar 
+            remainder={wordIndex * 100 / listToLearn.length} 
+            text={`${wordIndex} / ${listToLearn.length}`} />
        </section>
 
     )
