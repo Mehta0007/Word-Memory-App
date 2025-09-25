@@ -35,6 +35,25 @@ function App() {
     handleChangePage(1); // move to Dashboard
   }
 
+  function handleCompleteDay() {
+ const newDay =  day + 1
+ const newDatetime = Date.now()
+ setDay(newDay)
+ setDateTime(newDatetime)
+
+ localStorage.setItem('day', JSON.stringify( {
+  day: newDay, 
+  datetime: newDatetime}))
+  setSelectedPage(1)
+  }
+
+  function handleIncrementAttempts() {
+//take the current attmp number, and add one and save it to local storage
+const  newRecord = attempts + 1
+localStorage.setItem('attempts', newRecord )
+setAttempts(newRecord)
+  }
+
   useEffect(() => {
     //this callback is triggered on pg load
     if (!localStorage) {
@@ -71,7 +90,14 @@ function App() {
         history={history}
       />
     ),
-    2: <Challenge />,
+    2: <Challenge
+        day={day}
+        daysWords={daysWords}
+        handleChangePage={handleChangePage} 
+        handleIncrementAttempts={handleIncrementAttempts}
+        handleCompleteDay={handleCompleteDay}
+        PLAN={PLAN}
+    />,
   };
 
   return (
