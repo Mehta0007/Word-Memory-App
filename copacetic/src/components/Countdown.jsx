@@ -35,6 +35,6 @@ export default function Countdown(props) {
             <button onClick={() => { handleChangePage(2) }} className="start-task">
                 <h6>Start</h6>
             </button>
-        </div>
+        </div> 
     )
 }
