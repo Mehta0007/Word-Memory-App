@@ -23,17 +23,16 @@ export default function Challenge(props) {
         ])
 
         
-        
-    const  word = listToLearn[wordIndex]
-    const isNewWord = showDefinition || (!isEncountered(day, word)) && wordIndex < daysWords.length
-    // const word = 'copacetic' 
+    
+    const word = listToLearn[wordIndex]
+    const isNewWord = showDefinition || (!isEncountered(day, word) && wordIndex < daysWords.length)
     const definition = DEFINITIONS[word]
 
-
-    function giveUp(){
+    function giveUp() {
         setListToLearn([...listToLearn, word])
         setShowDefinition(true)
     }
+
 
 
     return(
@@ -62,12 +61,12 @@ export default function Challenge(props) {
                 onChange={(e) => {
 //if a user has entered th correct num og char we need to do few thing 1: id the entry is correct we need to incr sttpemts and move them to next word 2: if the entery is oincorrect we need to increment attpemts and if they 
 
-if(e.target.value.length == definition.length && e.target.value > inputVal.length ) {
+if(e.target.value.length == definition.length && e.target.value.length > inputVal.length ) {
     handleIncrementAttempts()
 //compare words
 if(e.target.value.toLowerCase() == definition.toLowerCase()) {
 //then the user correct outcome
-if(wordIndex >= listToLearn.length -1) {
+if(wordIndex >= listToLearn.length - 1) {
     handleCompleteDay()
     return
 }
